@@ -43,7 +43,7 @@
             String cpf = JOptionPane.showInputDialog("Qual seu cpf?");
             
             // Faz conexão com o Servidor
-            Eleitor Eleitor = new Eleitor("127.0.0.1", 15500);
+            Eleitor Eleitor = new Eleitor("192.168.20.22", 15500);
            
             //Envia uma string para o servidor 
             Eleitor.enviar_mensagem(cpf);
