@@ -29,7 +29,6 @@ public class Servidor {
                 soqueteCliente = servidor.soquete_servidor.accept();
                 new Thread( new TrataEleitor(soqueteCliente)).start();
 
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

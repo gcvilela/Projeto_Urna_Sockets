@@ -92,7 +92,7 @@ public class TrataEleitor implements Runnable {
                     System.out.println(cpf.get(i));
                 }
                 System.out.println("**************************************************");
-                System.out.println("----------- LISTA DOS CPFS CANDIDATOS-------------");
+                System.out.println("----------- LISTA DOS CANDIDATOS-------------");
                 System.out.println("Boisonaro: " + voto1 + " votos \nLulete: "+ voto2 + " votos");
                 System.out.println("Branco: " + votob + " votos");
                 System.out.println("Nulos: " + voton + " votos");
