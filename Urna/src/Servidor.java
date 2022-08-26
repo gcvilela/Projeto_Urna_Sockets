@@ -17,19 +17,22 @@ public class Servidor {
     }
 
     public static void main(String[] args) throws Exception {
+        //Cria variavel com a servidor  
         Servidor servidor = new Servidor(15500);
 
         Socket soqueteCliente = null;
+
         while (true) {
             try {
 
+                //Aceita a nova conexao, acria e inicia uma nova thread
                 soqueteCliente = servidor.soquete_servidor.accept();
                 new Thread( new TrataEleitor(soqueteCliente)).start();
+
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

@@ -9,7 +9,11 @@ public class TrataEleitor implements Runnable {
     private Socket soquete_cliente;
     private ObjectOutputStream saida;
     private ObjectInputStream entrada;
-    static int voto1 = 0, voto2 =0, votob = 0, voton = 0;
+    
+    // Variaveis utilizadas para Armazenar os votos 
+    static int voto1 = 0, voto2 =0, votob = 0, voton = 0;  
+
+    //ArrayList para armazenar os CPFs
     static ArrayList<String> cpf = new ArrayList<String>();
 
     public TrataEleitor(Socket soquete_cliente) throws Exception {
@@ -35,20 +39,22 @@ public class TrataEleitor implements Runnable {
     public void run() {
         try {
 
-            // recebe o CPF 
+            // recebe o CPF tranforma em string e guarda numa variavel mensagem do tipo string
             String mensagem = (String)receber_mensagem();
 
             //variavel para testar se O CPF não foi repetido 
             boolean confere = false;
-
                 // Loop de Verificação de CPF
                 for (int i = 0; i < cpf.size(); i++) {
                     if (cpf.get(i).equals(mensagem)) {
-                        enviar_mensagem("CPF Já utilizado:");
+                        enviar_mensagem("CPF Já utilizado ou Invalido:");
                         confere = true;
                     }
                 }
-
+            if(mensagem.equals("")){
+                enviar_mensagem("CPF Já utilizado ou Invalido:");
+                confere = true;
+            } 
             // Condicinal em caso de cpf não estiver repetido 
             if(confere == false){
 
@@ -57,26 +63,31 @@ public class TrataEleitor implements Runnable {
                 // Inserir voto
                 String escolha = (String) receber_mensagem();
 
+                // Transforma o voto que vem como string em inteiro
                 int voto = Integer.parseInt(escolha);
+
+                //Faz a verificação dos votos e retorna a mensagem referente ao voto
                 if( voto == 17){
                     voto1 += 1 ;
-                    cpf.add(mensagem);
                     enviar_mensagem("Obrigado pelo Voto");
                 }else if(voto == 13){
                     voto2 += 1 ;
-                    cpf.add(mensagem);
                     enviar_mensagem("Obrigado pelo Voto");
                 }else if(voto == 0){
                     votob += 1; 
-                }
-                else{
+                    enviar_mensagem("Voto Branco");
+                }else{
                     voton +=1;
                     enviar_mensagem("Voto anulado");
                 }
-                
-               
 
+                // Adiciona o CPF no ArrayList
+                 cpf.add(mensagem);
+               
+                // Apenas controle do Servidor
                 System.out.println("----------- LISTA DOS CPFS CADASTRADOS------------");
+
+                //Verifica e mostra todos os CPFs cadastrados no Array CPF
                 for (int i = 0; i < cpf.size(); i++) {
                     System.out.println(cpf.get(i));
                 }
@@ -86,7 +97,6 @@ public class TrataEleitor implements Runnable {
                 System.out.println("Branco: " + votob + " votos");
                 System.out.println("Nulos: " + voton + " votos");
                 System.out.println("**************************************************");
-            
             }
             finalizar();
         } catch (Exception e) {

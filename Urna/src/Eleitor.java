@@ -31,38 +31,52 @@
     }
 
     public static void main(String[] args) throws Exception {
+        // Inicia a interação co o Usuario
         JOptionPane.showMessageDialog(null, "Bem vindo ao sistema Votaçao Online");
-        boolean x = false; 
-        while( x == false){
+
+        //Variavel para conferir se o CPF está correto
+        boolean confere = false; 
+
+        //Loop para conferir se esta tudo certo 
+        while( confere == false){
+
             String cpf = JOptionPane.showInputDialog("Qual seu cpf?");
             
-            Eleitor cliente = new Eleitor("127.0.0.1", 15500);
-            cliente.enviar_mensagem(cpf);
+            // Faz conexão com o Servidor
+            Eleitor Eleitor = new Eleitor("127.0.0.1", 15500);
+           
+            //Envia uma string para o servidor 
+            Eleitor.enviar_mensagem(cpf);
+            
+            // Recebe uma String do Servidor 
+            String resposta = (String) Eleitor.receber_mensagem();
 
-            String resposta = (String) cliente.receber_mensagem();
-
-            if(resposta.equals("CPF Já utilizado:")){
+            // Verifica se o CPF ja foi Utilizado
+            if(resposta.equals("CPF Já utilizado ou Invalido:")){
 
                 JOptionPane.showMessageDialog(null,resposta);
-                
-                cliente.finalizar();
+                Eleitor.finalizar();
                 
             }else{
                 JOptionPane.showMessageDialog(null,resposta);
 
-                String inputValue = JOptionPane.showInputDialog("Em qual Candidato voce quer votar? \n 17 - Boisonaro \n 13 - Lulete \n 00 - Branco \n Outro valor sera Nulo");
+                String inputValue = JOptionPane.showInputDialog("Em qual Candidato voce quer votar? \n 17 - Boisonaro \n 13 - Lulete \n 00 - Branco \n\n            Outro valor sera Nulo");
                 //inputValue = JOptionPane.showInputDialog("");
                 // Object[] options = { “OK”, “CANCELAR”,”VOLTAR” };
                 // JOptionPane.showOptionDialog(null, “Clique OK para continuar”, “Aviso”,
                 // JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
                 // null, options, options[0]);
+                
+                // envia o numero escolhido como String
+                Eleitor.enviar_mensagem(inputValue);
 
-                cliente.enviar_mensagem(inputValue);
-                resposta = (String)cliente.receber_mensagem();
+                // Recebe a confirmação do voto
+                resposta = (String)Eleitor.receber_mensagem();
                 JOptionPane.showMessageDialog(null,resposta);
 
-                cliente.finalizar();
-                x = true;
+                // Finaliza a interação
+                Eleitor.finalizar();
+                confere = true;
             }
         }
     }
